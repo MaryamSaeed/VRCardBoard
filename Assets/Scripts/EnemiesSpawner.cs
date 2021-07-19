@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class EnemiesSpawner : MonoBehaviour
 {
-    public GameObject Enemies;
+    //public
+    [Tooltip("drag and drop Enemy prefab")]
+    public GameObject EnemyPrefab;
+    [Tooltip("write down Room length")]
     public float RoomLength;
+    [Tooltip("number of enemies in the pool")]
     public int ObjectPoolLength;
+    //Private
     private int currentlength = 0;
     private float SpawningTime = 0;
     private List<GameObject> EnemiesPool;
@@ -16,10 +21,16 @@ public class EnemiesSpawner : MonoBehaviour
         EnemiesPool = new List<GameObject>();
         if (ObjectPoolLength > 0)
             for (int i = 0; i < ObjectPoolLength; i++)
-                EnemiesPool.Add(Instantiate(Enemies));
+                EnemiesPool.Add(Instantiate(EnemyPrefab));
     }
-   
     private void Update()
+    {
+        SpawnEnemy();
+    }
+    /// <summary>
+    /// spawns an enemy every 2 seconds
+    /// </summary>
+    private void SpawnEnemy()
     {
         SpawningTime += Time.deltaTime;
         if (SpawningTime >= 2)
@@ -32,5 +43,4 @@ public class EnemiesSpawner : MonoBehaviour
             SpawningTime = 0;
         }
     }
-  
 }
