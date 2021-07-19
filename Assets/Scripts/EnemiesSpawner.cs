@@ -25,7 +25,7 @@ public class EnemiesSpawner : MonoBehaviour
         if (SpawningTime >= 2)
         {
             var nx = Random.Range(-RoomLength, RoomLength);
-            var nz = Random.Range(0, RoomLength);
+            var nz = Random.Range(2, RoomLength);
             EnemiesPool[currentlength].transform.position = new Vector3(nx, 0.5f, nz);
             EnemiesPool[currentlength].SetActive(true);
             currentlength = (currentlength + 1) % ObjectPoolLength;
