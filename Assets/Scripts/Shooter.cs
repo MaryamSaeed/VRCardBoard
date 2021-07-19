@@ -31,7 +31,7 @@ public class Shooter : MonoBehaviour
     {
         bulletPool[currentBullet].transform.position = transform.position;
         bulletPool[currentBullet].SetActive(true);
-        bulletPool[currentBullet].GetComponent<Rigidbody>().AddForce(10 * transform.forward, ForceMode.Impulse);
+        bulletPool[currentBullet].GetComponent<Rigidbody>().AddForce(10 * Camera.main.transform.forward, ForceMode.Impulse);
         currentBullet = (currentBullet + 1) % BulletPoollength;
     }
 }

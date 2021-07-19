@@ -6,15 +6,21 @@ using UnityEngine;
 /// </summary>
 public class EnemyController : MonoBehaviour
 {
-    private ParticleSystem Effect;
+    private ParticleSystem effect;
     private ScoringPanelController scoringPanel;
     private void OnEnable()
     {
-        Effect = FindObjectOfType<ParticleSystem>();
-        scoringPanel = FindObjectOfType<ScoringPanelController>();
-        Invoke("DisableObject", 15);
+        if (effect == null)
+            effect = FindObjectOfType<ParticleSystem>();
+        if (scoringPanel == null)
+            scoringPanel = FindObjectOfType<ScoringPanelController>();
+        transform.LookAt(Camera.main.transform);
+        Invoke("DisableObject", 10);
     }
-
+    /// <summary>
+    /// get invoked after a certain interval of time 
+    /// to disabl ethe gameobject
+    /// </summary>
     private void DisableObject()
     {
         gameObject.SetActive(false);
@@ -27,11 +33,16 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-            Effect.transform.position = transform.position;
-            Effect.Play();
+            effect.transform.position = transform.position;
+            effect.Play();
             scoringPanel.EnemyDown.Invoke();
             collision.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
+    }
+    private void Update()
+    {
+        var pos = Vector3.Lerp(transform.position, Camera.main.transform.position, Time.deltaTime/5);
+        transform.position = new Vector3(pos.x,0.5f,pos.z);
     }
 }
