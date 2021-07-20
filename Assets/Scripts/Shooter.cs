@@ -1,37 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class Shooter : MonoBehaviour
 {
-    public GameObject Bullet;
-    public int BulletPoollength;
-    private List<GameObject> bulletPool;
+    public GameObject NormalBulletPrefab;
+    public GameObject SeekerBulletPrefab;
+    [HideInInspector]
+    public UnityEvent SeekerModeActivated;
+    public int NormalBulletPoollength;
+    private List<GameObject> normalBulletPool;
+    private List<GameObject> seekerBulletPool;
     private int currentBullet = 0;
+    private int seekerBulletsCount = 4;
+    private bool seekerMode;
     // Start is called before the first frame update
     private void Start()
     {
-        bulletPool = new List<GameObject>();
-        if (BulletPoollength > 0)
+        normalBulletPool = new List<GameObject>();
+        seekerBulletPool = new List<GameObject>();
+        if (NormalBulletPoollength > 0)
         {
-            for (int i = 0; i < BulletPoollength; i++)
-                bulletPool.Add(Instantiate(Bullet));
+            for (int i = 0; i < NormalBulletPoollength; i++)
+                normalBulletPool.Add(Instantiate(NormalBulletPrefab));
         }
+        for (int j = 0; j < seekerBulletsCount; j++)
+            seekerBulletPool.Add(Instantiate(SeekerBulletPrefab));
+        SeekerModeActivated = new UnityEvent();
+        SeekerModeActivated.AddListener(OnSeekerModeActivated);
     }
     // Update is called once per frame
     private void Update()
     {
         if (Input.touchCount == 1 && Input.touches[0].phase == TouchPhase.Ended)
-                ShootBullet();
-            else if (Input.GetMouseButtonUp(0))
-                ShootBullet();
+        {
+            if (seekerMode)
+                ShootSeekerBullet();
+            else
+                ShootNormalBullet();
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (seekerMode)
+                ShootSeekerBullet();
+            else
+                ShootNormalBullet();
+        }
     }
-    private void ShootBullet()
+    /// <summary>
+    /// shoot a normal bullet in the forward direction of 
+    /// the camera
+    /// </summary>
+    private void ShootNormalBullet()
     {
-        bulletPool[currentBullet].transform.position = transform.position;
-        bulletPool[currentBullet].SetActive(true);
-        bulletPool[currentBullet].GetComponent<Rigidbody>().AddForce(10 * Camera.main.transform.forward, ForceMode.Impulse);
-        currentBullet = (currentBullet + 1) % BulletPoollength;
+        normalBulletPool[currentBullet].transform.position = transform.position;
+        normalBulletPool[currentBullet].SetActive(true);
+        normalBulletPool[currentBullet].GetComponent<Rigidbody>().AddForce(10 * Camera.main.transform.forward, ForceMode.Impulse);
+        currentBullet = (currentBullet + 1) % NormalBulletPoollength;
+    }
+    private void ShootSeekerBullet()
+    {
+        seekerBulletPool[currentBullet].transform.position = transform.position;
+        seekerBulletPool[currentBullet].SetActive(true);
+        if (currentBullet < seekerBulletsCount - 1)
+            currentBullet++;
+        else
+        {
+            FindObjectOfType<ScoringPanelController>().StartCoolDown.Invoke();
+            seekerMode = false;
+        }
+    }
+    private void OnSeekerModeActivated()
+    {
+        seekerMode = true;
+        currentBullet = 0;
     }
 }

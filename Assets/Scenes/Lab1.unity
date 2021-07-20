@@ -139,8 +139,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af578f38c0bb70e419f7015ec2ad9730, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 6316748460061636987, guid: 28d07ed746fc23d4bb3dc0b81f0fda61, type: 3}
-  BulletPoollength: 10
+  NormalBulletPrefab: {fileID: 6316748460061636987, guid: 28d07ed746fc23d4bb3dc0b81f0fda61,
+    type: 3}
+  SeekerBulletPrefab: {fileID: 5431416006531250242, guid: ef2a3d19aa929394fac0fde0170a1848,
+    type: 3}
+  SeekerModeActivated:
+    m_PersistentCalls:
+      m_Calls: []
+  NormalBulletPoollength: 10
 --- !u!1 &431795579
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +190,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a3aae2ace10e5428a401ff9ea97537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enemies: {fileID: 7402587274968892790, guid: fb1fac2bebd18e84b84b72040bf0347c, type: 3}
+  EnemyPrefab: {fileID: 7402587274968892790, guid: fb1fac2bebd18e84b84b72040bf0347c,
+    type: 3}
   RoomLength: 5
   ObjectPoolLength: 10
 --- !u!1 &456326870
@@ -226,8 +233,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.232, y: -0.098}
+  m_SizeDelta: {x: -0.464, y: -0.196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &456326872
 MonoBehaviour:
@@ -1028,6 +1035,9 @@ MonoBehaviour:
   ScoreNumber: {fileID: 841018929}
   CoolDownBar: {fileID: 1964612401}
   EnemyDown:
+    m_PersistentCalls:
+      m_Calls: []
+  StartCoolDown:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1001 &1104981213

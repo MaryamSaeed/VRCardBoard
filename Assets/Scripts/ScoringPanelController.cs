@@ -16,14 +16,22 @@ public class ScoringPanelController : MonoBehaviour
     public Image CoolDownBar;
     [HideInInspector]
     public UnityEvent EnemyDown;
+    [HideInInspector]
+    public UnityEvent StartCoolDown;
+    private UnityEvent coolDownEnded;
     //private
     private int score;
-    private int coolDownTime;
+    private int coolDownTime = 10;
+    private bool seekButtonActive = true;
     // Start is called before the first frame update
     void Start()
     {
         EnemyDown = new UnityEvent();
         EnemyDown.AddListener(OnEnemyDown);
+        StartCoolDown = new UnityEvent();
+        StartCoolDown.AddListener(OnStartCoolDown);
+        coolDownEnded = new UnityEvent();
+        coolDownEnded.AddListener(OnCoolDownEnded);
         score = 0;
         CoolDownBar.fillAmount = 0;
     }
@@ -35,13 +43,36 @@ public class ScoringPanelController : MonoBehaviour
         score++;
         ScoreNumber.text = score.ToString();
     }
+
+    private void OnStartCoolDown()
+    {
+        seekButtonActive = false;
+        StartCoroutine("UpdateCoolDownProgressBar");
+    }
+    private IEnumerator UpdateCoolDownProgressBar()
+    {
+        var cooltime = 0.0f;
+        while (cooltime < coolDownTime)
+        {
+            CoolDownBar.fillAmount = cooltime;
+            cooltime += Time.deltaTime;
+            yield return null;
+        }
+        coolDownEnded.Invoke();
+    }
+    private void OnCoolDownEnded()
+    {
+        CoolDownBar.fillAmount = 0;
+        seekButtonActive = true;
+    }
     /// <summary>
     /// activates the seeker shooting mode and notify enemies
     /// with the change
     /// </summary>
     public void OnSeekerModeSelected()
     {
-        Debug.Log("Seeker Mode selected");
+        if (seekButtonActive)
+            FindObjectOfType<Shooter>().SeekerModeActivated.Invoke();
     }
     /// <summary>
     /// switchs to the normal shooting mode around the user
@@ -50,4 +81,5 @@ public class ScoringPanelController : MonoBehaviour
     {
         Debug.Log("Normal Mode selected");
     }
+
 }
