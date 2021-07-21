@@ -8,6 +8,7 @@ public class Shooter : MonoBehaviour
 {
     public GameObject NormalBulletPrefab;
     public GameObject SeekerBulletPrefab;
+    public GvrReticlePointer rectilPointer;
     [HideInInspector]
     public UnityEvent SeekerModeActivated;
     public int NormalBulletPoollength;
@@ -35,19 +36,9 @@ public class Shooter : MonoBehaviour
     private void Update()
     {
         if (Input.touchCount == 1 && Input.touches[0].phase == TouchPhase.Ended)
-        {
-            if (seekerMode)
-                ShootSeekerBullet();
-            else
-                ShootNormalBullet();
-        }
+            Shoot();
         else if (Input.GetMouseButtonUp(0))
-        {
-            if (seekerMode)
-                ShootSeekerBullet();
-            else
-                ShootNormalBullet();
-        }
+            Shoot();
     }
     /// <summary>
     /// shoot a normal bullet in the forward direction of 
@@ -76,5 +67,26 @@ public class Shooter : MonoBehaviour
     {
         seekerMode = true;
         currentBullet = 0;
+    }
+    private void Shoot()
+    {
+        if (IsNotUIElement())
+        {
+            if (seekerMode)
+                ShootSeekerBullet();
+            else
+                ShootNormalBullet();
+        }
+    }
+    private bool IsNotUIElement()
+    {
+        if (rectilPointer.CurrentRaycastResult.gameObject != null)
+        {
+            if (rectilPointer.CurrentRaycastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
+                return false;
+            else
+                return true;
+        }
+        else return true;
     }
 }

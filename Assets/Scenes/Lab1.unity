@@ -143,10 +143,23 @@ MonoBehaviour:
     type: 3}
   SeekerBulletPrefab: {fileID: 5431416006531250242, guid: ef2a3d19aa929394fac0fde0170a1848,
     type: 3}
+  rectilPointer: {fileID: 270386782}
   SeekerModeActivated:
     m_PersistentCalls:
       m_Calls: []
   NormalBulletPoollength: 10
+--- !u!114 &270386782 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 723926960, guid: 60270cf52a5e94998a5a335989159738,
+    type: 3}
+  m_PrefabInstance: {fileID: 1104981213}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270386779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7dcc90c2e60c4011896c7f21fc1f557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &431795579
 GameObject:
   m_ObjectHideFlags: 0
