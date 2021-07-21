@@ -11,6 +11,8 @@ public class Shooter : MonoBehaviour
     public GvrReticlePointer rectilPointer;
     [HideInInspector]
     public UnityEvent SeekerModeActivated;
+    [HideInInspector]
+    public UnityEvent NormalModeActivated;
     public int NormalBulletPoollength;
     private List<GameObject> normalBulletPool;
     private List<GameObject> seekerBulletPool;
@@ -19,6 +21,18 @@ public class Shooter : MonoBehaviour
     private bool seekerMode;
     // Start is called before the first frame update
     private void Start()
+    {
+        InitBulltePools();
+        InitEvents();
+    }
+    private void InitEvents()
+    {
+        SeekerModeActivated = new UnityEvent();
+        SeekerModeActivated.AddListener(OnSeekerModeActivated);
+        NormalModeActivated = new UnityEvent();
+        NormalModeActivated.AddListener(OnNormalModeActivated);
+    }
+    private void InitBulltePools()
     {
         normalBulletPool = new List<GameObject>();
         seekerBulletPool = new List<GameObject>();
@@ -29,8 +43,6 @@ public class Shooter : MonoBehaviour
         }
         for (int j = 0; j < seekerBulletsCount; j++)
             seekerBulletPool.Add(Instantiate(SeekerBulletPrefab));
-        SeekerModeActivated = new UnityEvent();
-        SeekerModeActivated.AddListener(OnSeekerModeActivated);
     }
     // Update is called once per frame
     private void Update()
@@ -65,7 +77,7 @@ public class Shooter : MonoBehaviour
     }
     private void OnSeekerModeActivated()
     {
-        seekerMode = true;
+        SetSeekerModeFlag(true);
         currentBullet = 0;
     }
     private void Shoot()
@@ -88,5 +100,14 @@ public class Shooter : MonoBehaviour
                 return true;
         }
         else return true;
+    }
+    private void OnNormalModeActivated()
+    {
+        SetSeekerModeFlag(false);
+    }
+    private void SetSeekerModeFlag(bool seeking)
+    {
+        seekerMode = seeking;
+        currentBullet = 0;
     }
 }

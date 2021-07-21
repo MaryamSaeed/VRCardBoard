@@ -33,7 +33,7 @@ public class EnemiesSpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         SpawningTime += Time.deltaTime;
-        if (SpawningTime >= 2)
+        if (SpawningTime >= 1)
         {
             var nx = Random.Range(-RoomLength, RoomLength);
             var nz = Random.Range(2, RoomLength);

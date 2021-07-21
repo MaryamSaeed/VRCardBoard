@@ -43,7 +43,7 @@ public class ScoringPanelController : MonoBehaviour
         if (seekButtonActive)
             score++;
         else
-            score = score + 2;
+            score += 2;
         ScoreNumber.text = score.ToString();
     }
 
@@ -61,7 +61,7 @@ public class ScoringPanelController : MonoBehaviour
         var cooltime = 0.0f;
         while (cooltime <= coolDownTime)
         {
-            CoolDownBar.fillAmount = cooltime/coolDownTime;
+            CoolDownBar.fillAmount = cooltime / coolDownTime;
             cooltime += Time.deltaTime;
             yield return null;
         }
@@ -82,14 +82,22 @@ public class ScoringPanelController : MonoBehaviour
     public void OnSeekerModeSelected()
     {
         if (seekButtonActive)
+        {
             FindObjectOfType<Shooter>().SeekerModeActivated.Invoke();
+            seekButtonActive = false;
+        }
     }
     /// <summary>
     /// switchs to the normal shooting mode around the user
     /// </summary>
     public void OnNormalModeSelected()
     {
-        Debug.Log("Normal Mode selected");
+        if (!seekButtonActive)
+        {
+            FindObjectOfType<Shooter>().NormalModeActivated.Invoke();
+            StopAllCoroutines();
+            OnCoolDownEnded();
+        }
     }
     private void OnDisable()
     {
