@@ -40,7 +40,10 @@ public class ScoringPanelController : MonoBehaviour
     /// </summary>
     private void OnEnemyDown()
     {
-        score++;
+        if (seekButtonActive)
+            score++;
+        else
+            score = score + 2;
         ScoreNumber.text = score.ToString();
     }
 
@@ -49,17 +52,24 @@ public class ScoringPanelController : MonoBehaviour
         seekButtonActive = false;
         StartCoroutine("UpdateCoolDownProgressBar");
     }
+    /// <summary>
+    /// animates the cooldown bar progress
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator UpdateCoolDownProgressBar()
     {
         var cooltime = 0.0f;
-        while (cooltime < coolDownTime)
+        while (cooltime <= coolDownTime)
         {
-            CoolDownBar.fillAmount = cooltime;
+            CoolDownBar.fillAmount = cooltime/coolDownTime;
             cooltime += Time.deltaTime;
             yield return null;
         }
         coolDownEnded.Invoke();
     }
+    /// <summary>
+    /// activates seeker button and resets the cooldown bar
+    /// </summary>
     private void OnCoolDownEnded()
     {
         CoolDownBar.fillAmount = 0;
@@ -81,5 +91,8 @@ public class ScoringPanelController : MonoBehaviour
     {
         Debug.Log("Normal Mode selected");
     }
-
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
 }
