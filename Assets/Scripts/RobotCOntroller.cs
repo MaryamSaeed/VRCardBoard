@@ -9,10 +9,9 @@ public class RobotCOntroller : MonoBehaviour
     public LayerMask MusicNoteLayer;
     private Vector3 rightrotation = new Vector3(0, 90, 0);
     private Collider currentHolded;
-    private enum facingDirection { forward, backword, left, right };
-    private facingDirection currentfacing = facingDirection.forward;
     private float radius = 1;
     private Rigidbody robotRigidBody = null;
+    private Vector3 resultant = Vector3.zero;
     // Start is called before the first frame update
     private void Start()
     {
@@ -28,26 +27,38 @@ public class RobotCOntroller : MonoBehaviour
     private void MoveRobot()
     {
         robotRigidBody.velocity = Vector3.zero;
+        resultant = Vector3.zero;
         if (Input.GetKey(KeyCode.W) || InputManager.Instance.getButton(InputManager.Instance.triangle))
         {
             //move forward
-            robotRigidBody.AddForce(0, 0, forceFactor);
+            var movingforce = new Vector3(0, 0, forceFactor);
+            robotRigidBody.AddForce(movingforce);
+            resultant = resultant + movingforce;
         }
         if (Input.GetKey(KeyCode.S) || InputManager.Instance.getButton(InputManager.Instance.cross))
         {
             //move backword
-            robotRigidBody.AddForce(0, 0, -forceFactor);
+            var movingforce = new Vector3(0, 0, -forceFactor);
+            robotRigidBody.AddForce(movingforce);
+            resultant = resultant + movingforce;
         }
         if (Input.GetKey(KeyCode.A) || InputManager.Instance.getButton(InputManager.Instance.square))
         {
             //move Left
-            robotRigidBody.AddForce(-forceFactor, 0, 0);
+            var movingforce = new Vector3(-forceFactor, 0, 0);
+            robotRigidBody.AddForce(movingforce);
+            resultant = resultant + movingforce;
         }
         if (Input.GetKey(KeyCode.D) || InputManager.Instance.getButton(InputManager.Instance.circler))
         {
             //move Right
-            robotRigidBody.AddForce(forceFactor, 0, 0);
+            var movingforce = new Vector3(forceFactor, 0, 0);
+            robotRigidBody.AddForce(movingforce);
+            resultant = resultant + movingforce;
         }
+        if (resultant != Vector3.zero)
+            transform.forward = resultant.normalized;
+
     }
     private void GrabMusicNote()
     {
