@@ -25,19 +25,17 @@ public class MusicNotesRack : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("MusicNote"))
         {
-            if (musicNotescount <= musicNotesTarget)
-            {
-                musicNotescount++;
-            }
-            else
+            other.gameObject.SetActive(false);
+            musicNotescount++;
+            if (musicNotescount == musicNotesTarget)
             {
                 rackAnimator.SetTrigger("play");
+                musicNotescount = 0;
             }
         }
     }
     public void OnRackClosed()
     {
         StartMacarinaDance.Invoke();
-        
     }
 }
